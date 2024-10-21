@@ -10,12 +10,12 @@ class SecretWord():
     def word_draw(self):
         return choice(self.words_to_choose)
 
-    def word_board(self, word, user_letter):
+    def word_board(self, word, user_letter, all_letter_typed):
         for letter in word:
-            if letter == user_letter:
-                print(f'{letter}', end=" ")
+            if letter == user_letter or letter in all_letter_typed:
+                print(f'{letter}', end="")
             else:
-                print("*", end=" ")
+                print("*", end="")
 
     def play(self):
         attempts = 4
@@ -32,16 +32,19 @@ class SecretWord():
             if letter not in word_drawn:
                 attempts -= 1
             else:
-                self.word_board(word_drawn, letter)
+                if letter in letter_list:
+                    print("\n Type again, this word exist!!")
+                    continue
                 letter_list.append(letter)
+                self.word_board(word_drawn, letter, letter_list)
 
             if attempts == 0:
                 print("Attempts fineshed!!")
                 break
 
-            # todo     
-            if any(word_drawn in w for w in letter_list):
-                print("Congratulation")
+            if all(w in letter_list for w in word_drawn):
+                print("\n Congratulation")
+                break
 
 
 if __name__ == '__main__':
